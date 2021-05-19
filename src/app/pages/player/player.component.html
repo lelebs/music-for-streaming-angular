@@ -1,0 +1,47 @@
+<div class="container">
+    <mat-toolbar class="main-toolbar">
+        <span>Audio Player</span>
+    </mat-toolbar>
+    <div class="music-queue">
+        <div class="music-queue-header">
+            <mat-icon mat-list-icon>library_music</mat-icon> 
+            <span style="margin-right: 5px;">Queue</span>
+        </div>
+        <div class="music-queue-body" cdkDropList (cdkDropListDropped)="drop($event)">
+            <mat-card *ngFor="let file of files"
+                cdkDrag
+            >
+                <span class="music-queue-card">
+                    <mat-icon mat-list-icon
+                        *ngIf="file.playing"
+                    >
+                        music_note</mat-icon> 
+                    <span>{{ file.artist }} - {{ file.name}}</span>
+                </span>
+            </mat-card>
+        </div>
+    </div>
+    <div class="media-footer">
+        <mat-toolbar>
+            <mat-toolbar-row>
+            {{ state?.readableCurrentTime }}
+            <mat-slider class="time-slider" min="0" [max]="state?.duration" step="1" [value]="state?.currentTime" [disabled]="state?.error || currentFile.index === undefined"></mat-slider>
+            {{ state?.readableDuration }}
+            </mat-toolbar-row>
+            <mat-toolbar-row class="media-action-bar">
+            <button mat-button >
+                <mat-icon mat-list-icon>skip_previous</mat-icon>
+            </button>
+            <button mat-button [disabled]="state?.error" *ngIf="!state?.playing">
+                <mat-icon mat-list-icon>play_circle_filled</mat-icon>
+            </button>
+            <button mat-button *ngIf="state?.playing">
+                <mat-icon mat-list-icon>pause</mat-icon>
+            </button>
+            <button  mat-button [disabled]="isLastPlaying()">
+                <mat-icon mat-list-icon>skip_next</mat-icon>
+            </button>
+            </mat-toolbar-row>
+        </mat-toolbar>
+    </div>
+</div>
